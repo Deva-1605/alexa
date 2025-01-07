@@ -7,6 +7,10 @@ from youtubesearchpython import VideosSearch
 # Initialize the text-to-speech engine
 engine = pyttsx3.init()
 
+# Set voice to female (if available)
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)  # Set to the second voice (typically female on most systems)
+
 def speak(text):
     """Converts text to speech."""
     engine.say(text)
@@ -60,7 +64,7 @@ def execute_command(command):
     elif "open notepad" in command:
         speak("Opening Notepad.")
         os.system("notepad")
-    elif "search youtube" in command:
+    elif "search" in command:
         speak("What would you like to search for on YouTube?")
         search_query = take_command()
         if search_query != "None":
