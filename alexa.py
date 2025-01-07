@@ -2,6 +2,7 @@ import speech_recognition as sr
 import pyttsx3
 import datetime
 import os
+from youtubesearchpython import VideosSearch
 
 # Initialize the text-to-speech engine
 engine = pyttsx3.init()
@@ -39,6 +40,18 @@ def take_command():
         speak("Sorry, I didn't understand that. Please repeat.")
         return "None"
 
+def youtube_search(query):
+    """Searches YouTube for videos based on the user's query."""
+    videos_search = VideosSearch(query, limit = 5)
+    results = videos_search.result()
+    
+    if len(results['videos']) > 0:
+        speak("Here are some results from YouTube:")
+        for idx, video in enumerate(results['videos']):
+            speak(f"Result {idx + 1}: {video['title']}.")
+    else:
+        speak("Sorry, I couldn't find any results on YouTube.")
+
 def execute_command(command):
     """Executes tasks based on the command."""
     if "time" in command:
@@ -47,6 +60,11 @@ def execute_command(command):
     elif "open notepad" in command:
         speak("Opening Notepad.")
         os.system("notepad")
+    elif "search youtube" in command:
+        speak("What would you like to search for on YouTube?")
+        search_query = take_command()
+        if search_query != "None":
+            youtube_search(search_query)
     elif "exit" in command or "quit" in command:
         speak("Goodbye!")
         exit()
